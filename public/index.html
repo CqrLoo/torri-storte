@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Torri Storte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="/vendor/planck/planck.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <div id="ui">
+    <section class="screen active" id="menu">
+      <h1 class="logo" aria-label="Torri Storte">
+        <span class="word" aria-hidden="true"><b style="--h:188;--i:0">T</b><b style="--h:44;--i:1">O</b><b style="--h:282;--i:2">R</b><b style="--h:24;--i:3">R</b><b style="--h:138;--i:4">I</b></span>
+        <span class="word" aria-hidden="true"><b style="--h:350;--i:5;--r:-8deg;--y:4px">S</b><b style="--h:226;--i:6;--r:6deg;--y:-3px">T</b><b style="--h:44;--i:7;--r:-4deg;--y:2px">O</b><b style="--h:188;--i:8;--r:9deg;--y:-5px">R</b><b style="--h:282;--i:9;--r:-7deg;--y:3px">T</b><b style="--h:138;--i:10;--r:5deg;--y:-2px">E</b></span>
+      </h1>
+      <p class="tag">Impila, incastra, sopravvivi. Vince la coppa chi fa più punti.</p>
+      <div class="buttons">
+        <button data-action="online" class="primary">Gioca online</button>
+        <button data-action="training">Allenati da solo</button>
+      </div>
+      <div class="keys">
+        <p><kbd>←</kbd><kbd>→</kbd> sposta di mezzo blocco · <kbd>↑</kbd> ruota · <kbd>↓</kbd> scendi veloce</p>
+        <p><kbd>Q</kbd> usa la magia · <kbd>Esc</kbd> torna al menu · <kbd>M</kbd> audio</p>
+      </div>
+    </section>
+
+    <section class="screen" id="training">
+      <h2>Scegli la modalità</h2>
+      <div class="modes">
+        <button data-action="race" class="mode" style="--h:44"><strong>Gara</strong><span>Porta la torre oltre il traguardo e tienila ferma</span></button>
+        <button data-action="survival" class="mode" style="--h:138"><strong>Sopravvivenza</strong><span>Piazza 30 pezzi senza perdere tutte le vite</span></button>
+        <button data-action="puzzle" class="mode" style="--h:350"><strong>Rompicapo</strong><span>Incastra più pezzi possibile sotto il laser</span></button>
+      </div>
+      <p class="tag small">Ogni 5 pezzi ricevi una magia. Da solo solo quelle buone: Radici blocca la torre, Mattoncini ti dà due pezzi piccoli. Online arrivano anche Ghiaccio, Nebbia e Pezzo maledetto da lanciare a chi è in testa.</p>
+      <button data-action="menu" class="ghost">Indietro</button>
+    </section>
+
+    <section class="screen" id="online">
+      <h2>Gioca online</h2>
+      <input id="name" maxlength="16" placeholder="Il tuo nome" autocomplete="off">
+      <button data-action="create" class="primary">Crea una stanza</button>
+      <p class="or">oppure entra con un codice</p>
+      <div class="row">
+        <input id="code" maxlength="4" placeholder="ABCD" autocomplete="off">
+        <button data-action="join">Entra</button>
+      </div>
+      <button data-action="menu" class="ghost">Indietro</button>
+    </section>
+
+    <section class="screen" id="lobby">
+      <h2>Stanza <span id="roomCode"></span></h2>
+      <p class="tag">Passa il codice agli amici (massimo 4 giocatori).</p>
+      <ul id="players"></ul>
+      <div class="settings">
+        <label>Modalità
+          <select id="setSelect">
+            <option value="mix">Coppa mista</option>
+            <option value="race">Solo Gara</option>
+            <option value="survival">Solo Sopravvivenza</option>
+            <option value="puzzle">Solo Rompicapo</option>
+          </select>
+        </label>
+        <label>Round
+          <select id="roundSelect">
+            <option value="1">1</option>
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="7">7</option>
+          </select>
+        </label>
+      </div>
+      <button data-action="start" class="primary" id="startBtn">Avvia la coppa</button>
+      <p id="waitMsg">Aspetta che l'host avvii la coppa</p>
+      <button data-action="menu" class="ghost">Esci dalla stanza</button>
+    </section>
+
+    <section class="screen" id="results">
+      <h2 id="resultsTitle"></h2>
+      <ol id="ranking" class="board"></ol>
+      <p id="resultsNote" class="tag"></p>
+    </section>
+
+    <section class="screen" id="cup">
+      <h2 id="cupTitle"></h2>
+      <ol id="standings" class="board"></ol>
+      <button data-action="lobby" class="primary">Torna alla stanza</button>
+      <button data-action="menu" class="ghost">Torna al menu</button>
+    </section>
+
+    <section class="screen" id="end">
+      <h2 id="endTitle"></h2>
+      <p id="endSub" class="tag"></p>
+      <button data-action="again" class="primary">Rigioca</button>
+      <button data-action="training">Cambia modalità</button>
+      <button data-action="menu" class="ghost">Torna al menu</button>
+    </section>
+  </div>
+  <div id="toast" role="status"></div>
+</body>
+</html>

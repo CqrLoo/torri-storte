@@ -1,0 +1,224 @@
+* { box-sizing: border-box; margin: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: #07061a;
+  color: #fff;
+  font-family: Fredoka, "Trebuchet MS", system-ui, sans-serif;
+}
+
+#game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+#ui {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: radial-gradient(ellipse at center, rgba(7, 6, 26, 0.1), rgba(7, 6, 26, 0.6));
+  transition: opacity 0.3s;
+}
+
+#ui.hidden { opacity: 0; pointer-events: none; }
+
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: min(440px, 100%);
+  padding: 36px 34px;
+  background: rgba(24, 18, 58, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 30px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.screen.active { display: flex; animation: pop 0.4s cubic-bezier(0.2, 1.5, 0.4, 1); }
+
+@keyframes pop { from { transform: scale(0.88) rotate(-2deg); opacity: 0; } }
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.14em;
+  margin-bottom: 6px;
+  font-family: "Lilita One", Fredoka, sans-serif;
+  font-weight: 400;
+  font-size: clamp(34px, 8vw, 48px);
+  line-height: 1;
+}
+
+.logo .word { display: flex; gap: 0.08em; }
+
+.logo b {
+  --r: 0deg;
+  --y: 0px;
+  display: grid;
+  place-items: center;
+  width: 1.12em;
+  height: 1.12em;
+  font-weight: 400;
+  color: #fff;
+  border-radius: 0.16em;
+  background: linear-gradient(180deg, hsl(var(--h) 95% 70%), hsl(var(--h) 82% 46%));
+  box-shadow:
+    inset 0 0.09em 0 hsl(var(--h) 100% 84%),
+    inset 0 -0.11em 0 hsl(var(--h) 80% 32%),
+    0 0.1em 0 hsl(var(--h) 70% 18%),
+    0 0.2em 0.35em rgba(0, 0, 0, 0.35);
+  text-shadow: 0 0.06em 0 hsl(var(--h) 70% 24%);
+  transform: translateY(var(--y)) rotate(var(--r));
+  animation: drop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+  animation-delay: calc(var(--i) * 55ms);
+}
+
+@keyframes drop { from { transform: translateY(-160%) rotate(0deg); opacity: 0; } }
+
+h2 {
+  font-family: "Lilita One", Fredoka, sans-serif;
+  font-weight: 400;
+  font-size: 34px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-shadow: 0 3px 0 #2a1d5c;
+}
+#roomCode { color: #ffd76a; letter-spacing: 5px; }
+.tag, .or, #waitMsg { opacity: 0.8; text-align: center; }
+.or { font-size: 14px; }
+
+.buttons { display: flex; flex-direction: column; gap: 12px; width: 100%; margin-top: 6px; }
+
+button {
+  width: 100%;
+  padding: 14px 22px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  border: 0;
+  border-radius: 16px;
+  cursor: pointer;
+  background: linear-gradient(180deg, #5d4db8, #3a2d86);
+  box-shadow: 0 5px 0 #21185a, inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.08s, filter 0.15s;
+}
+
+button:hover { filter: brightness(1.12); }
+button:active { transform: translateY(4px); box-shadow: 0 1px 0 #21185a; }
+button:focus-visible, input:focus-visible { outline: 3px solid #8ff5ff; outline-offset: 2px; }
+
+button.primary {
+  background: linear-gradient(180deg, #ffb347, #ff7a45);
+  box-shadow: 0 5px 0 #b3471f, inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+button.primary:active { box-shadow: 0 1px 0 #b3471f; }
+button.ghost { background: transparent; box-shadow: none; opacity: 0.75; }
+button:disabled { opacity: 0.45; cursor: not-allowed; filter: none; transform: none; }
+
+input {
+  width: 100%;
+  padding: 13px 16px;
+  font: inherit;
+  font-size: 18px;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+#code { text-transform: uppercase; letter-spacing: 5px; text-align: center; }
+.row { display: flex; gap: 10px; width: 100%; }
+.row button { width: auto; }
+
+#players { list-style: none; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 8px; }
+#players li { padding: 11px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.08); }
+
+.keys { font-size: 14px; opacity: 0.75; text-align: center; line-height: 1.9; margin-top: 8px; }
+
+kbd {
+  display: inline-block;
+  min-width: 24px;
+  margin: 0 2px;
+  padding: 0 6px;
+  font-family: inherit;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.35);
+}
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  padding: 12px 20px;
+  font-weight: 600;
+  border-radius: 14px;
+  background: #ff4d6d;
+  opacity: 0;
+  transform: translate(-50%, 40px);
+  transition: 0.3s;
+  pointer-events: none;
+}
+
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+[hidden] { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen.active, .logo b { animation: none; }
+}
+
+.modes { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+button.mode {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  background: linear-gradient(180deg, hsl(var(--h) 70% 52%), hsl(var(--h) 65% 36%));
+  box-shadow: 0 5px 0 hsl(var(--h) 60% 20%), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+button.mode:active { box-shadow: 0 1px 0 hsl(var(--h) 60% 20%); }
+button.mode strong { font-family: "Lilita One", Fredoka, sans-serif; font-weight: 400; font-size: 22px; }
+button.mode span { font-size: 14px; font-weight: 500; opacity: 0.9; }
+
+.settings { display: flex; gap: 10px; width: 100%; }
+.settings label { flex: 1; display: flex; flex-direction: column; gap: 6px; font-size: 14px; opacity: 0.9; }
+
+select {
+  width: 100%;
+  padding: 11px 12px;
+  font: inherit;
+  font-size: 16px;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+select option { color: #1a1440; }
+select:disabled { opacity: 0.6; }
+
+.board { list-style: none; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 8px; }
+
+.board li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.board li.me { background: rgba(255, 215, 106, 0.18); outline: 1px solid rgba(255, 215, 106, 0.5); }
+.board .medal { width: 32px; font-size: 20px; text-align: center; }
+.board .who { flex: 1; font-weight: 600; }
+.board .pts { color: #ffd76a; font-weight: 700; }
+
+.tag.small { font-size: 14px; line-height: 1.5; }
